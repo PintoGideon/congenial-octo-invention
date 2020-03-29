@@ -1,0 +1,39 @@
+import React from "react";
+import { server } from "../../lib/api/server";
+import { ListingsData } from "./types";
+
+interface Props {
+  title: string;
+}
+
+const LISTINGS = `
+query Listings {
+    listings {
+        id
+        title
+        image
+        address
+        price
+        numOfGuests
+        numOfBeds
+        numOfBaths
+        rating
+    }
+}
+`;
+
+export const Listings = ({ title }: Props) => {
+  const fetchListings = async () => {
+    const listings = await server.fetch<ListingsData>({
+      query: LISTINGS
+    });
+
+    console.log("Listings", listings);
+  };
+  return (
+    <div>
+      <h2>{title}</h2>
+      <button onClick={fetchListings}>Query Listings</button>
+    </div>
+  );
+};
