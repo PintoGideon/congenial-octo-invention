@@ -7,11 +7,11 @@ export interface Listing {
   address: string;
   price: number;
   numOfGuests: number;
+  numOfBeds: number;
+  numOfBaths: number;
   rating: number;
 }
 
 export interface Database {
   listings: Collection<Listing>;
 }
-
-
