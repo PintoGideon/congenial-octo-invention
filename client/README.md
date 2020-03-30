@@ -6,4 +6,4 @@
 
 * Reference URL of GraphQL endpoint
 
-
+- Using Apollo boost, react-apollo and graphql.
