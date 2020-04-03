@@ -1,17 +1,38 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Listings } from "./containers/Listings/Listings";
 import "./styles/index.css";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Home } from "./sections/Home/Home";
+import { Listing } from "./sections/Listing/Listing";
+import { Host } from "./sections/Host/Host";
+import { NotFound } from "./sections/NotFound/NotFound";
+import { User } from "./sections/User/User";
+import { Listings } from "./sections/Listings/Listings";
 
 const client = new ApolloClient({
   uri: "/api"
 });
 
+const App = () => {
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/host" component={Host} />
+        <Route exact path="/listing/id" component={Listing} />
+        <Route exact path="/listings/:location?" component={Listings} />
+        <Route exact path="/user/:id" component={User} />
+        <Route component={NotFound} />
+      </Switch>
+    </Router>
+  );
+};
+
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Listings title="Tinyhouse Listings" />
+    <App />
   </ApolloProvider>,
   document.getElementById("root")
 );

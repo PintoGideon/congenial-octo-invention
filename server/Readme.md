@@ -1,4 +1,4 @@
-### Graphql,l
+### Graphql
 
 GraphQl is a query language for APIs.
 
@@ -48,3 +48,40 @@ The arguments for a resolver are.
 
 In Node, process contains information about the current running process and env is a object within process which represents the state of the node environment.
 
+### API driven development
+
+The graphql api is going to expose business logic and data.
+The server is a node express server which serves a graphql api and stores data in MongoDB.
+
+### Complex parts
+
+Handling booking dates is tricky. The app uses key value pairs to handle
+booking by dates, month and day.
+
+An example of how this looks like:
+
+```javascript
+// 2019-01-01  year:2019 | month:01 | day:01
+```
+
+```javascript
+const bookingIndex = {
+  "2019": {
+    "00": {
+      "01": true,
+      "02": true
+    },
+    "04": {
+      "31": true
+    },
+    "05": {
+      "01": true
+    },
+    "06": {
+      "20": true
+    }
+  }
+};
+```
+
+***Note***: The Js function for getting the month returns 0 .... and 11 for Dec.
