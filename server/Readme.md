@@ -84,4 +84,27 @@ const bookingIndex = {
 };
 ```
 
-***Note***: The Js function for getting the month returns 0 .... and 11 for Dec.
+**_Note_**: The Js function for getting the month returns 0 .... and 11 for Dec.
+
+### OAuth roles:
+
+1. Resource Owner
+2. App
+3. Authorization and Resource Server
+
+The first step in the Google OAuth flow requires us to redirect our
+user to Google so that they can authorize our app and sign in.
+We'll need to generate a url that will navigate the user to the consent form.
+
+We'll construct this url in the server and have our client app retrieve the url through a query field.
+
+This query field is the auth url field. Once Google sign in authenticates the user and redirects them the client login screen,
+We'll want to have the react app pass the code the node server.
+
+THe node server will then make a request to google services with the code to retrieve the access token. The login mutation will be fired by the react app with the code to make the request to the google service to retrieve the token and further info.
+
+### Generating an Authentication url
+
+***Documentation***: http://github.com/googleapis/google-api-nodejs-client#oauth2-client
+
+
