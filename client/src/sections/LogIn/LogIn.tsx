@@ -102,12 +102,14 @@ export const LogIn = ({ setViewer }: Props) => {
           </Title>
           <Text>Sign in with Google to start booking available rentals!</Text>
         </div>
-        <button className="log-in-card__google-button">
+        <button
+          className="log-in-card__google-button"
+          onClick={handleAuthorize}
+        >
           <img
             src={googleLogo}
             alt="Google Logo"
             className="log-in-card__google-button-logo"
-            onClick={handleAuthorize}
           />
           <span className="log-in-card__google-button-text">
             Sign in with Google
