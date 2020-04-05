@@ -1,10 +1,8 @@
 import React, { useEffect, useRef } from "react";
 
 import { useApolloClient, useMutation } from "@apollo/react-hooks";
-import Card from "antd/es/card";
-import Typography from "antd/es/typography";
-import Layout from "antd/es/layout";
-import { Spin } from "antd";
+
+import { Spin, Layout, Typography, Card } from "antd";
 import googleLogo from "./assets/google_logo.jpg";
 import { Viewer } from "../../lib/types";
 import { AUTH_URL } from "../../lib/graphql/queries/AuthUrl";

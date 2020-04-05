@@ -13,6 +13,8 @@ import { Listings } from "./sections/Listings/Listings";
 import { LogIn } from "./sections/LogIn/LogIn";
 import Layout from "antd/es/layout";
 import { Viewer } from "./lib/types";
+import { AppHeader } from "./sections/AppHeader";
+import { Affix } from "antd";
 
 const client = new ApolloClient({
   uri: "/api"
@@ -32,6 +34,10 @@ const App = () => {
   return (
     <Router>
       <Layout id="app">
+        <Affix offsetTop={0} className="app__affix-header">
+          <AppHeader />
+        </Affix>
+
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/host" component={Host} />
