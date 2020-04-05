@@ -1,14 +1,97 @@
-import React from "react";
-import { Card, Typography } from "antd";
-import { Layout } from "antd/lib";
+import React, { useEffect, useRef } from "react";
+
+import { useApolloClient, useMutation } from "@apollo/react-hooks";
+import Card from "antd/es/card";
+import Typography from "antd/es/typography";
+import Layout from "antd/es/layout";
+import { Spin } from "antd";
 import googleLogo from "./assets/google_logo.jpg";
+import { Viewer } from "../../lib/types";
+import { AUTH_URL } from "../../lib/graphql/queries/AuthUrl";
+import { AuthUrl as AuthUrlData } from "../../lib/graphql/queries/AuthUrl/__generated__/AuthUrl";
+import { LOG_IN } from "../../lib/graphql/mutations/LogIn/";
+import {
+  LogIn as LogInData,
+  LogInVariables
+} from "../../lib/graphql/mutations/LogIn/__generated__/LogIn";
+import { ErrorBanner } from "../../lib/components/ErrorBanner";
+import {
+  displaySuccessNotification,
+  displayErrorMessage
+} from "../../lib/utils";
+
+import { Redirect } from "react-router-dom";
 
 const { Content } = Layout;
+
 const { Text, Title } = Typography;
 
-export const LogIn = () => {
+interface Props {
+  setViewer: (viewer: Viewer) => void;
+}
+
+export const LogIn = ({ setViewer }: Props) => {
+  const client = useApolloClient();
+  const [
+    login,
+    { data: logInData, loading: logInLoading, error: logInError }
+  ] = useMutation<LogInData, LogInVariables>(LOG_IN, {
+    onCompleted: data => {
+      // Executed once mutation is completed
+      if (data && data.logIn) {
+        setViewer(data.logIn);
+        displaySuccessNotification("You have successfully signed in");
+      }
+    }
+  });
+
+  const logInRef = useRef(login);
+
+  useEffect(() => {
+    const code = new URL(window.location.href).searchParams.get("code");
+    if (code) {
+      logInRef.current({
+        variables: {
+          input: { code }
+        }
+      });
+    }
+  }, []);
+
+  const handleAuthorize = async () => {
+    try {
+      const { data } = await client.query<AuthUrlData>({
+        query: AUTH_URL
+      });
+      console.log("Data", data.authUrl);
+      window.location.href = data.authUrl;
+    } catch {
+      displayErrorMessage(
+        "Sorry, We weren't able to log you in. Please try again later"
+      );
+    }
+  };
+
+  if (logInLoading) {
+    return (
+      <Content className="log-in">
+        <Spin size="large" tip="Loggin you in....." />
+      </Content>
+    );
+  }
+
+  if (logInData && logInData.logIn) {
+    const { id: viewerId } = logInData.logIn;
+    return <Redirect to={`/user/${viewerId}`} />;
+  }
+
+  const logInErrorBannerElement = logInError ? (
+    <ErrorBanner description="Sorry, We weren't able to log you in. Please try again later" />
+  ) : null;
+
   return (
     <Content className="log-in">
+      {logInErrorBannerElement}
       <Card className="log-in-card">
         <div className="log-in-card__intro">
           <Title level={3} className="log-in-card__intro-title">
@@ -17,7 +100,7 @@ export const LogIn = () => {
             </span>
           </Title>
           <Title level={3} className="log-in-card__intro-title">
-            Log in to Tinyhouse
+            Log in to TinyHouse!
           </Title>
           <Text>Sign in with Google to start booking available rentals!</Text>
         </div>
@@ -26,13 +109,13 @@ export const LogIn = () => {
             src={googleLogo}
             alt="Google Logo"
             className="log-in-card__google-button-logo"
+            onClick={handleAuthorize}
           />
           <span className="log-in-card__google-button-text">
             Sign in with Google
           </span>
         </button>
         <Text type="secondary">
-          {" "}
           Note: By signing in, you'll be redirected to the Google consent form
           to sign in with your Google account.
         </Text>
