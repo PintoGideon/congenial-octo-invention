@@ -36,3 +36,9 @@ Data that doesn't change might be requested repeatedly.
 5. /user/:id - display a user
 6. /login - login
 7. /stripe- stripe authentication
+
+
+### Cross Site Scripting
+
+1. Using cookie parser
+2. 

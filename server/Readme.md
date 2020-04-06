@@ -105,6 +105,24 @@ THe node server will then make a request to google services with the code to ret
 
 ### Generating an Authentication url
 
-***Documentation***: http://github.com/googleapis/google-api-nodejs-client#oauth2-client
+**_Documentation_**: http://github.com/googleapis/google-api-nodejs-client#oauth2-client
+
+### Cookie parser
+
+```javascript
+var express = require("express");
+var cookieParser = require("cookie-parser");
+
+var app = express();
+app.use(cookieParser());
+```
+
+```
+cookieParser(secret,options)
+```
+
+secret is a string or array used for signing cookies. This is optional and if not provided , will not parse signed cookies. If a string is provided, this is used as the secret. If an array is provided, an attempt will be made to unsign the cookie with each secret in order.
+
+options an object that is passed to cookie.parse.
 
 
